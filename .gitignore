@@ -1,0 +1,13 @@
+# Created by pytest automatically.
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Data files
+*.csv
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
