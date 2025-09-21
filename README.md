@@ -33,7 +33,7 @@ You need to have the following software installed:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/options-market-maker-sim.git
+    git clone https://github.com/IliassSjm/options-market-maker-sim.git
     cd options-market-maker-sim
     ```
 
