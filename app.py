@@ -2,8 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-# --- Import Your Simulation Engine ---
-# This brings in the main class from your orchestrator script
+# Import Your Simulation Engine
 from main_simulator import MarketMakingSimulation
 
 # --- App Configuration ---
@@ -36,7 +35,7 @@ with st.sidebar.expander("Market Maker Parameters", expanded=True):
 # --- Main App Logic ---
 if st.button("🚀 Run Full Simulation"):
 
-    # 1. Assemble parameters from the UI into dictionaries
+    # Assemble parameters from the UI into dictionaries
     simulation_params = {
         'initial_price': initial_price,
         'strike_price': strike_price,
@@ -65,31 +64,42 @@ if st.button("🚀 Run Full Simulation"):
     # Use a spinner to show that the simulation is running
     with st.spinner("Running complex simulation... This may take a moment."):
         
-        # 2. Initialize your main simulation class with the parameters
+        # Initialize and run your main simulation class
         sim = MarketMakingSimulation(simulation_params, market_maker_params)
-        
-        # 3. Run the simulation
         results = sim.run_simulation()
         
-        # 4. Generate the performance report and plots
+        # Generate the performance report and plots
         report = sim.generate_performance_report()
         fig = sim.plot_simulation_results()
 
     st.success("✅ Simulation Complete!")
 
-    # --- Display Results ---
-    st.header("Performance Report")
-    
-    # Display key metrics in columns
+    # --- Display Results in a structured layout ---
+    st.header("Simulation Results")
+
+    # 1. Use st.columns to display key metrics side-by-side
     col1, col2, col3 = st.columns(3)
     col1.metric("Final P&L", f"${report['pnl_metrics']['final_pnl']:,.2f}")
     col2.metric("Total Trades", f"{report['trading_metrics']['total_trades']}")
     col3.metric("Sharpe Ratio", f"{report['pnl_metrics']['sharpe_ratio']:.2f}")
 
-    # Show the full report in an expandable section
-    with st.expander("View Detailed Performance Report"):
-        st.json(report)
+    # 2. Use st.tabs to organize the detailed outputs
+    tab1, tab2, tab3 = st.tabs(["📊 Visualizations", "📄 Detailed Report", "📈 Trade Log"])
 
-    st.header("Simulation Visualizations")
-    # 5. Display the Matplotlib figure in Streamlit
-    st.pyplot(fig)
+    with tab1:
+        st.subheader("Performance Visualizations")
+        # Display the Matplotlib figure, making it fit the container width
+        st.pyplot(fig, use_container_width=True)
+
+    with tab2:
+        st.subheader("Detailed Performance Report")
+        # Show the full report JSON in the second tab
+        st.json(report)
+        
+    with tab3:
+        st.subheader("Trade Log")
+        if sim.trade_log:
+            trade_df = pd.DataFrame(sim.trade_log)
+            st.dataframe(trade_df)
+        else:
+            st.write("No trades were executed in this simulation run.")
