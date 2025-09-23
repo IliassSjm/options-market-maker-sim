@@ -42,7 +42,6 @@ You need to have the following software installed:
     python3 -m venv .venv
     source .venv/bin/activate
     ```
-    *On Windows, use: `.venv\Scripts\activate`*
 
 3.  **Install the dependencies:**
     ```bash
@@ -55,7 +54,7 @@ You need to have the following software installed:
     ```
     Your browser will automatically open to the application.
 
-### Running with Docker 🐳
+### Running with Docker 
 
 This is the recommended way to run the project as it requires no local Python setup.
 
